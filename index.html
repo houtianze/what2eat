@@ -1,0 +1,140 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+  <title>吃啥</title>
+</head>
+
+<body ng-app="EatApp" ng-controller="EatCtrl as ctrl" ng-cloak>
+  <!--
+    Your HTML content here
+  -->
+  <md-content class="md-padding">
+    <!--
+    <h2 class="md-title" style="font-weight: bold; text-align: center">早餐</h2>
+    <md-chips ng-model="ctrl.breakfast" readonly="ctrl.readonly">
+      <md-chip-template>
+        <strong>{{$chip}}</strong>
+      </md-chip-template>
+    </md-chips>
+    <br />
+    <h2 class="md-title" style="font-weight: bold; text-align: center">晚餐</h2>
+    <md-chips ng-model="ctrl.dinner" readonly="ctrl.readonly">
+      <md-chip-template>
+        <strong>{{$chip}}</strong>
+      </md-chip-template>
+    </md-chips>
+    <br/>
+  -->
+    <div id="menu", style="height: 2em; line-height: 1em" select-on-click>
+      早餐：
+      <b ng-repeat="f in breakfast">
+      {{ f + ',' }}
+      </b>
+      <br />
+      晚餐：
+      <b ng-repeat="f in dinner">
+      {{ f  + ',' }}
+      </b>
+    </div>
+    <!--
+    <md-chips ng-model="breakfast" readonly="ctrl.readonly" ng-click="highlight('#menu')">
+    </md-chips>
+    -->
+    <hr />
+    <md-button class="md-raised" ng-click="addfood(e, breakfast)" ng-repeat="e in breakfastlist">{{ e }}</md-button>
+    <hr />
+    <md-button class="md-raised" ng-click="addfood(e, dinner)" ng-repeat="e in soup">{{ e }}</md-button>
+    <br />
+    <md-button class="md-raised" ng-click="addfood(e, dinner)" ng-repeat="e in beancurd">{{ e }}</md-button>
+    <br />
+    <md-button class="md-raised" ng-click="addfood(e, dinner)" ng-repeat="e in vegetable">{{ e }}</md-button>
+    <br />
+    <md-button class="md-raised" ng-click="addfood(e, dinner)" ng-repeat="e in fries">{{ e }}</md-button>
+    <br />
+    <md-button class="md-raised" ng-click="addfood(e, dinner)" ng-repeat="e in meat">{{ e }}</md-button>
+    <br />
+    <md-button class="md-raised" ng-click="addfood(e, dinner)" ng-repeat="e in seafood">{{ e }}</md-button>
+  </md-content>
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+
+  <!-- Angular Material Library -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+
+  <!-- Your application bootstrap  -->
+  <script type="text/javascript">
+    /**
+     * You must include the dependency on 'ngMaterial'
+     */
+    var app = angular.module('EatApp', ['ngMaterial']);
+    app.controller('EatCtrl', ['$scope', '$element', '$document', '$window', EatCtrl])
+
+    function EatCtrl($scope, $element, $document, $window) {
+      $scope.breakfast= [];
+      $scope.dinner= [];
+      $scope.breakfastlist = ['小米粥', '花卷', '鸡蛋', '大米黄豆肉碎粥', '肉包子', '鸡蛋饼', '豆浆', '饺子', '大豆饼', '玉米'];
+      $scope.soup = ['紫菜蛋花汤', '玉米汤', '蘑菇汤', '银耳汤', '鸡丝汤', '火腿汤', '节瓜汤', '腐皮汤', '肉片汤', '蛋花汤', '豆腐鱼头小白菜汤'];
+      $scope.beancurd = ['老干妈炒豆腐', '肉碎葱花豆腐', '煎老豆腐'];
+      $scope.vegetable = ['生菜', '西洋菜', '苋菜', '通心菜'];
+      $scope.fries = ['豆角粒炒鸡蛋', '蒜炒丝瓜', '地三鲜', '笋丝炒牛肉', '青椒肉丝', '青尖椒炒鸡蛋', '荷塘月色', '鱼香肉丝', '鱼香茄子', '整鸡蛋糕'];
+      $scope.meat = ['花生吨鸡爪', '红烧鸡爪', '冬菇蒸鸡', '豆豉蒸排骨', '咕噜排骨', '冬菇肉饼', '咸蛋肉饼', '土豆炖牛肉', '萝卜炖牛肉', '炖猪肘子', '腊肠'];
+      $scope.seafood = ['蒸活虾', '炒冰虾', '蒸黄花鱼', '煎沙尖鱼', '炖黄尾鱼', '蒸鲳鱼', '蒸三文鱼'];
+
+      $scope.selectElementContents = function(el) {
+        var sel = $window.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+
+      // id = '#menu'
+      $scope.highlight = function(id) {
+        // TODO
+        var menuDiv = document.querySelector(id);
+        $scope.selectElementContents(menuDiv);
+      }
+
+      $scope.addfood = function(food, list) {
+        index = list.indexOf(food);
+        if (index == -1) {
+          list.push(food);
+        } else {
+          list.splice(index, 1);
+        }
+        $scope.highlight('#menu');
+      }
+    }
+
+    // http://stackoverflow.com/questions/25453279/angular-highlight-select-all-content-inside-div-element-angular
+    app.directive('selectOnClick', function ($window) {
+    return {
+        link: function (scope, element) {
+            element.on('click', function () {
+                var selection = $window.getSelection();
+                var range = document.createRange();
+                range.selectNodeContents(element[0]);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            });
+        }
+    }
+});
+  </script>
+
+</body>
+
+</html>
+
+<!--
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.
+-->
