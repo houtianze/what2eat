@@ -29,17 +29,9 @@
     </md-chips>
 -->
     <br/>
-    <textarea type="text" id="menu", ng-model="final" rows="4" style="width: 100%" select-on-click>
-      早餐：
-      <b ng-repeat="f in breakfast">
-      {{ f + ',' }}
-      </b>
-      <br />
-      晚餐：
-      <b ng-repeat="f in dinner">
-      {{ f  + ',' }}
-      </b>
-    </textarea>
+    <textarea type="text" id="menu", ng-model="final" rows="6" style="width: 100%" select-on-click>
+	</textarea>
+    <md-button class="md-warn" style="width: 100%" ng-click="breakfast=[]; dinner=[]; soup=[]; updatefinal()">Clear</md-button>
     <!--
     <md-chips ng-model="breakfast" readonly="ctrl.readonly" ng-click="highlight('#menu')">
     </md-chips>
@@ -47,7 +39,8 @@
     <hr />
     <md-button class="md-raised" ng-click="addfood(e, breakfast)" ng-repeat="e in breakfastlist">{{ e }}</md-button>
     <hr />
-    <md-button class="md-raised" ng-click="addfood(e, dinner)" ng-repeat="e in soup">{{ e }}</md-button>
+	<md-whiteframe class="md-whiteframe-2dp">汤：</md-whiteframe>
+    <md-button class="md-raised" ng-click="addfood(e, soup)" ng-repeat="e in souplist">{{ e }}</md-button>
     <br />
     <md-button class="md-raised" ng-click="addfood(e, dinner)" ng-repeat="e in beancurd">{{ e }}</md-button>
     <br />
@@ -83,8 +76,9 @@
     function EatCtrl($scope, $element, $document, $window) {
       $scope.breakfast= [];
       $scope.dinner= [];
+      $scope.soup= [];
       $scope.breakfastlist = ['小米粥', '花卷', '鸡蛋', '大米黄豆肉碎粥', '肉包子', '鸡蛋饼', '豆浆', '饺子', '大豆饼', '玉米'];
-      $scope.soup = ['紫菜蛋花汤', '玉米汤', '蘑菇汤', '银耳汤', '鸡丝汤', '火腿汤', '节瓜汤', '腐皮汤', '肉片汤', '蛋花汤', '豆腐鱼头小白菜汤'];
+      $scope.souplist = ['紫菜蛋花', '玉米', '蘑菇', '银耳', '鸡丝', '火腿', '节瓜', '腐皮', '肉片', '蛋花', '豆腐鱼头小白菜'];
       $scope.beancurd = ['老干妈炒豆腐', '肉碎葱花豆腐', '煎老豆腐'];
       $scope.vegetable = ['生菜', '西洋菜', '苋菜', '通心菜'];
       $scope.fries = ['豆角粒炒鸡蛋', '蒜炒丝瓜', '地三鲜', '笋丝炒牛肉', '青椒肉丝', '青尖椒炒鸡蛋', '荷塘月色', '鱼香肉丝', '鱼香茄子', '整鸡蛋糕'];
@@ -111,6 +105,14 @@
         tmpfinal += $scope.breakfast.join(', ');
 		tmpfinal += "\n晚餐："
 		tmpfinal += $scope.dinner.join(', ');
+		if ($scope.soup.length > 0) {
+          tmpfinal += "\n汤：";
+		  tmpfinal += $scope.soup.join(' ');
+		  tmpfinal += " 汤";
+		} else {
+          tmpfinal += "\n（不用做汤）";
+		}
+		tmpfinal += "\n\u263B"
 		$scope.final = tmpfinal;
 	  }
 
@@ -126,6 +128,7 @@
       }
 
 	  $scope.final = '';
+	  $scope.updatefinal();
     }
 
     // http://stackoverflow.com/questions/25453279/angular-highlight-select-all-content-inside-div-element-angular
