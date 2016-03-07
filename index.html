@@ -29,7 +29,7 @@
     </md-chips>
 -->
     <br/>
-    <textarea type="text" id="menu", ng-model="final" rows="5" style="width: 100%">
+    <textarea type="text" id="menu", ng-model="final" rows="6" style="width: 100%">
 	</textarea>
     <md-button class="md-warn" style="width: 100%" ng-click="breakfast=[]; dinner=[]; soup=[]; updatefinal()">Clear</md-button>
     <!--
@@ -112,7 +112,7 @@
 		} else {
           tmpfinal += "\n（不用做汤）";
 		}
-		//tmpfinal += "\n\u263B"
+		tmpfinal += "\n\u263B"
 		$scope.final = tmpfinal;
 	  }
 
@@ -124,7 +124,7 @@
           list.splice(index, 1);
         }
 		$scope.updatefinal();
-        //$scope.highlight('#menu');
+        $scope.highlight('#menu');
       }
 
 	  $scope.final = '';
