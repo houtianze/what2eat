@@ -74,7 +74,7 @@
 	app.config(['$compileProvider', '$mdThemingProvider',
       function($compileProvider, $mdThemingProvider) {
         $mdThemingProvider.theme('default');
-		$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|whatsapp):/);
+		$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|whatsapp|wechat):/);
        // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
       }
 	]);
@@ -119,9 +119,11 @@
 		} else {
           tmpfinal += "\n（不用做汤）";
 		}
-		tmpfinal += "\n\u263B"
+		//tmpfinal += "\n\u1F6A"
+		// http://www.charbase.com/1f600-unicode-grinning-face
+		tmpfinal += "\n" + "\ud83d\ude00".repeat(3);
 		$scope.final = tmpfinal;
-	    $scope.whatsappurl = "whatsapp://send?text=" + tmpfinal;
+	    $scope.whatsappurl = "whatsapp://send?text=" + encodeURIComponent(tmpfinal);
 	  }
 
       $scope.addfood = function(food, list) {
