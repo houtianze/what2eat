@@ -71,9 +71,13 @@
      * You must include the dependency on 'ngMaterial'
      */
     var app = angular.module('EatApp', ['ngMaterial']);
-	app.config(function($mdThemingProvider) {
-      $mdThemingProvider.theme('default');
-	});
+	app.config(['$compileProvider', '$mdThemingProvider',
+      function($compileProvider, $mdThemingProvider) {
+        $mdThemingProvider.theme('default');
+		$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|whatsapp):/);
+       // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
+      }
+	]);
     app.controller('EatCtrl', ['$scope', '$element', '$document', '$window', EatCtrl]);
 
     function EatCtrl($scope, $element, $document, $window) {
