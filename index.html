@@ -13,24 +13,6 @@
     Your HTML content here
   -->
   <md-content class="md-padding">
-  <!--
-    <h2 class="md-title" style="font-weight: bold; text-align: center">早餐</h2>
-    <md-chips ng-model="ctrl.breakfast" readonly="ctrl.readonly">
-      <md-chip-template>
-        <strong>{{$chip}}</strong>
-      </md-chip-template>
-    </md-chips>
-    <br />
-    <h2 class="md-title" style="font-weight: bold; text-align: center">晚餐</h2>
-    <md-chips ng-model="ctrl.dinner" readonly="ctrl.readonly">
-      <md-chip-template>
-        <strong>{{$chip}}</strong>
-      </md-chip-template>
-    </md-chips>
-    <br/>
-	<textarea type="text" id="menu", ng-model="final" rows="6" style="width: 100%; position: fixed" readonly="true">
-	</textarea>
-  -->
     <md-chips ng-model="breakfast">
     </md-chips>
     <md-chips ng-model="dinner">
@@ -38,8 +20,12 @@
     <md-chips ng-model="soup">
     </md-chips>
 	<md-button class="md-primary" ng-href="{{whatsappurl}}" style="width: 100%" target="_blank">Open WhatsApp</md-button>
+	<md-button class="md-primary" ng-href="{{wechatappurl}}" style="width: 100%; display: none" target="_blank">Open WeChat</md-button>
     <hr />
     <md-button class="md-raised" ng-click="addfood(e, breakfast)" ng-repeat="e in breakfastlist">{{ e }}</md-button>
+	<select ng-model="bftime" ng-change="updatefinal()">
+      <option ng-repeat="time in bftimelist" value="{{time}}">{{time}}</option>
+	</select>
     <hr />
 	<md-whiteframe class="md-whiteframe-2dp">汤：</md-whiteframe>
     <md-button class="md-raised" ng-click="addfood(e, soup)" ng-repeat="e in souplist">{{ e }}</md-button>
@@ -74,17 +60,19 @@
 	app.config(['$compileProvider', '$mdThemingProvider',
       function($compileProvider, $mdThemingProvider) {
         $mdThemingProvider.theme('default');
-		$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|whatsapp|wechat):/);
+		$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|whatsapp|wechat|weixin):/);
        // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
       }
 	]);
     app.controller('EatCtrl', ['$scope', '$element', '$document', '$window', EatCtrl]);
 
     function EatCtrl($scope, $element, $document, $window) {
-      $scope.breakfast= [];
-      $scope.dinner= [];
-      $scope.soup= [];
+      $scope.breakfast = [];
+	  $scope.bftime = '7:30';
+      $scope.dinner = [];
+      $scope.soup = [];
       $scope.breakfastlist = ['小米粥', '花卷', '鸡蛋', '大米黄豆肉碎粥', '肉包子', '鸡蛋饼', '豆浆', '饺子', '土豆饼', '玉米'];
+      $scope.bftimelist = ['7:30', '8:20', '8:45'];
       $scope.souplist = ['紫菜蛋花', '玉米', '蘑菇', '银耳', '鸡丝', '火腿', '节瓜', '腐皮', '肉片', '蛋花', '豆腐鱼头小白菜'];
       $scope.beancurd = ['老干妈炒豆腐', '肉碎葱花豆腐', '煎老豆腐'];
       $scope.vegetable = ['生菜', '西洋菜', '苋菜', '通心菜'];
@@ -109,7 +97,7 @@
 
 	  $scope.updatefinal = function() {
         tmpfinal = "爸妈，明天我要：\n早餐：";
-        tmpfinal += $scope.breakfast.join(', ');
+        tmpfinal += $scope.breakfast.join(', ') + " (" + $scope.bftime + ")";
 		tmpfinal += "\n晚餐："
 		tmpfinal += $scope.dinner.join(', ');
 		if ($scope.soup.length > 0) {
@@ -121,9 +109,10 @@
 		}
 		//tmpfinal += "\n\u1F6A"
 		// http://www.charbase.com/1f600-unicode-grinning-face
-		tmpfinal += "\n" + "\ud83d\ude00".repeat(3);
+		tmpfinal += "\n" + "\ud83d\ude00".repeat(1);
 		$scope.final = tmpfinal;
 	    $scope.whatsappurl = "whatsapp://send?text=" + encodeURIComponent(tmpfinal);
+	    $scope.wechatappurl = "weixin://send?text=" + encodeURIComponent(tmpfinal);
 	  }
 
       $scope.addfood = function(food, list) {
